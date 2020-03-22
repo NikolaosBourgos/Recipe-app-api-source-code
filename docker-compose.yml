@@ -1,0 +1,41 @@
+# Docker compose is a tool that allows us to run our docker image easily from our
+#project location.It allows us to manage the different services that make up our
+#project. For example.one service might be the python application that we run,
+#another service might be the database. To sum up, this yml file contains the
+#configuration for all the services
+
+# version of docker-compose
+version: "3"
+#define the services that make up our application
+services:
+  app:
+    build:
+      context: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./app:/app
+    command: >
+      sh -c "python manage.py runserver 0.0.0.0:8000"
+#what the above lines mean is:
+# 1) we are gonna have a service called "app"
+# 2) in the "build" section of the configuration we are gonna set the context
+#          to "." which means our current directory
+# 3) "ports" -> map the port 8000 of the host to the port 8000 of the docker container
+# 4) "volume"s -> allows us to get the updates that we make to our project into
+#     our docker image in real time. So it maps a volume from our local machine
+#     to a volume in a docker container. Thus every time that you change a file
+#     in the project it automatically gets updated in the container and thus you
+#     you don't need to restart docker to get the changes into effect.
+#  "- ./app:/app" map the "app" directory of the host machine to the "app" directory
+#   in our docker image
+# 5) "command" -> specifies the command that is used to run our docker container
+#    the ">" symbol is used so that we can write in the below line. To continue
+#   writing in the below line, we must start with one indent to the right (inside)
+#    sh -c -> we run the command using shell
+# "python manage.py runserver 0.0.0.0:8000"-> run the django development server
+# available on all ip adresses that run on the docker container(0.0.0.0) and on
+# the port 8000, which is subsequently mapped to port 8000 of the host
+
+
+#FINALLY run this file using "docker-compose" build
