@@ -1,0 +1,23 @@
+#what language is my project
+language: python
+python:
+  - "3.7"
+
+#specify the services needed
+services:
+  - docker
+
+#specify the before_script that travis will run BEFORE it executes any of
+#the automation commands
+before_script: pip install docker-compose
+
+#Now specify the script that travis will run
+script:
+  - docker-compose run app sh -c "python manage.py test && flake8"
+#flake8 is the linting tool
+#So, everytime we push a change to github travis will do the following things:
+# 1)spin up a python server running python 3.7
+# 2)make the docker service available
+# 3)use pip to install docker-compose
+# 4)run the script
+#If the above exits with a failure then it will fail the build and notify us
